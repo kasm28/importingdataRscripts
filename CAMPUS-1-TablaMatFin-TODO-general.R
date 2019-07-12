@@ -40,7 +40,16 @@ setwd("<location of our dataset>")
 
 
 library(readxl)
-
+matriculados1 <- as.data.frame(read.table(file.choose()
+head(matriculados1)
+summary(matriculados1)
+class(matriculados1)
+sapply(data1, class)                                          
+                                          
+                                          
+                                          
+                                          
+                       
 #N.ID   TEXT
 #CodCarrera    TEXT
 #Estudiante    TEXT
