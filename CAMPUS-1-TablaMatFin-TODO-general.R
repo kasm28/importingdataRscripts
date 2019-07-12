@@ -33,30 +33,38 @@
 #To concatenate words, inserting a . in between to words instead of a space.
 #Make sure that any missing values in your data set are indicated with NA.
 
-N.ID
-CodCarrera
-Estudiante
-Nombre
-Servicio ODM
-Fecha ODM
-Monto
-Saldo
-ODM
-Tipo Servicio
-Cohorte
-Semestre
-Genero
-Jornada
-Estado
-Mencion
-Instrumento de Pago
-Fecha
-Estructura Academica
-Nucleo
-Periodo
-Tipo de Cuenta
-Entidad
-Cuenta
+
+rm(list=ls())
+getwd()
+setwd("<location of our dataset>")
+
+
+library(readxl)
+
+#N.ID   TEXT
+#CodCarrera    TEXT
+#Estudiante    TEXT
+#Nombre     TEXT
+#Servicio ODM    TEXT 
+#Fecha ODM     DATE
+#Monto
+#Saldo
+#ODM     TEXT    
+#Tipo Servicio     TEXT
+#Cohorte      
+#Semestre
+#Genero      
+#Jornada
+#Estado     
+#Mencion
+#Instrumento de Pago
+#Fecha
+#Estructura Academica     TEXT
+#Nucleo
+#Periodo
+#Tipo de Cuenta
+#Entidad      TEXT
+#Cuenta     TEXT
 
 
 
