@@ -47,10 +47,11 @@ matriculados1 <- as.data.frame(read.delim(file.choose(), sep="!", header=TRUE))
 head(matriculados1)
 summary(matriculados1)
 class(matriculados1)
-sapply(data1, class) 
+sapply(matriculados1, class) 
 
+str(matriculados1)
 #contamos los valores unicos para las variables estudiante y ODM 
-count()
+count() ???????
 
 #creamos la variable que nos dará el codigo unico por el cual
 #vamos a empezar a limpiar los datos
@@ -73,6 +74,21 @@ matriculados_191 <- merge(matriculados1, programas_name, by="CodCarrera", all=TR
 #al final del "CodCarrera" o sencillamente los que cruzaron con el 
 #merge() anterior, que son los de la tabla de programas de virtual.
 
+
+
+delete rows which do not appear on "programas_name" -do not end with V (expluding the exception V1324)
+OR
+keep rows that appear on "programas_name" -ended with V (including the exception V1324)
+
+le paso un vector con los codigos de programa de la tabla de 36 programas 
+y ese vector lo coloco como condicion para keep o drop rows
+
+
+
+
+
+
+
 install.packages("tydiverse")
 
 library(tidyverse)
@@ -89,6 +105,27 @@ library(dplyr)
 #my_data %>% distinct(col1, other_col, col3, .keep_all = TRUE)
 matric_vir_191 <- matriculados_191 %>% distinct(codunico, .keep_all= TRUE)
 
+#buscamos hacer un subset con la suma de estudiantes matriculados por
+#programa. Primero agrupamos todo por programa en matric_xprog_vir_191
+
+matric_vir_agrupada_191 <- group_by(matric_vir_191, programa)
+
+#y ahora sacamos los conteos de estudiantes (registros unicos en la tabla)
+#por programa
+
+matric_vir_xprog_191 <- summarize(matric_vir_agrupada_191, count = n(),)#dist = mean(Distance, na.rm = T), delay = mean(ArrDelay, na.rm = T
+matric_vir_xprog_191
+
+#sin haber hecho la parte de valores unicos tambiens e pudo haber sacado esta misma tabla
+
+
+#https://www3.nd.edu/~steve/computing_with_data/24_dplyr/dplyr.html
+
+matric_vir_xprog_191_2 <- group_by(matriculados_191, programa)
+summarise(matric_vir_xprog_191_2,  = n_distinct(TailNum), flights = n())
+
+                                  
+                          
 
 
                                           
