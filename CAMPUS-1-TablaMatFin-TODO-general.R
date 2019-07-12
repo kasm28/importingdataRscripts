@@ -38,13 +38,59 @@ rm(list=ls())
 getwd()
 setwd("<location of our dataset>")
 
+library("data.table")
+# Check if you already installed the package
+any(grepl("data.table", installed.packages()))
 
-library(readxl)
-matriculados1 <- as.data.frame(read.table(file.choose()
+
+matriculados1 <- as.data.frame(read.delim(file.choose(), sep="!", header=TRUE))
 head(matriculados1)
 summary(matriculados1)
 class(matriculados1)
-sapply(data1, class)                                          
+sapply(data1, class) 
+
+#contamos los valores unicos para las variables estudiante y ODM 
+count()
+
+#creamos la variable que nos dará el codigo unico por el cual
+#vamos a empezar a limpiar los datos
+matriculados1['codigounico'] <- unite(matriculados1, matriculados1$codigounico, c(3:9, -4:-8)         verificar 
+                                          
+#importamos los datos de los programas para conocer los nombres
+#que ya viene en formato de excel documento .xls
+#y pegarselos a los codigos que trae el .txt
+
+library(readxl)                                         
+programas_name <- as.data.frame(read_excel(file.choose(), header=TRUE)))
+
+matriculados_191 <- merge(matriculados1, programas_name, by="CodCarrera", all=TRUE)
+#Returns all rows from both tables, join records from the 
+#left which have matching keys in the right table.
+
+##########################
+#ahora vamos a eliminar los registros de estudiantes que no estan o
+#pertenecen a la modalidad virtual dejando solo los que contengan una "V" 
+#al final del "CodCarrera" o sencillamente los que cruzaron con el 
+#merge() anterior, que son los de la tabla de programas de virtual.
+
+install.packages("tydiverse")
+
+library(tidyverse)
+# Remove duplicates based on "codunico" column
+matric_vir_191 <- matriculados_191[!duplicated(matriculados_191$codunico), ]
+#o se puede con el comando unique() que me deja un dataset con
+#solo los datos unicos pero no nos da el mismo resultado?
+
+install.packages("dplyr")
+library(dplyr)
+#Remove duplicate rows based on all columns:
+#my_data %>% distinct()                                 
+#Remove duplicate rows based on certain columns (variables):
+#my_data %>% distinct(col1, other_col, col3, .keep_all = TRUE)
+matric_vir_191 <- matriculados_191 %>% distinct(codunico, .keep_all= TRUE)
+
+
+
                                           
                                           
                                           
