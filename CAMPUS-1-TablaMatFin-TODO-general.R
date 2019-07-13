@@ -67,6 +67,9 @@ library(dplyr)
 #                        division = as.character(state.division))
 #res = mutate(states.df,
 #   concated_column = paste(name, region, division, sep = '_'))
+library(tidyverse)
+#matriculados1['codunico'] <- matriculados1 %>% 
+#  unite(codunico, c("estudiante", "ODM"))
 matriculados1['codunico'] <- mutate(matriculados1,
                                        codunico = paste( matriculados1$estudiante, matriculados1$ODM, sep= "."))
 
