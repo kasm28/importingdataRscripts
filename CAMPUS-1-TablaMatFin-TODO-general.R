@@ -70,6 +70,8 @@ library(dplyr)
 matriculados1['codunico'] <- mutate(matriculados1,
                                        codunico = paste( matriculados1$estudiante, matriculados1$ODM, sep= "."))
 
+matriculados1['codunico'] <- paste( matriculados1$estudiante, matriculados1$ODM, sep= ".")
+
 
 #importamos los datos de los programas para conocer los nombres
 #que ya viene en formato de excel documento .xls
@@ -139,9 +141,7 @@ matric_vir_agrupada_191 <- group_by(matric_vir_191, programa)
 matric_vir_xprog_191 <- summarize(matric_vir_agrupada_191, count = n(),)#dist = mean(Distance, na.rm = T), delay = mean(ArrDelay, na.rm = T
 matric_vir_xprog_191
 
-#sin haber hecho la parte de valores unicos tambiens e pudo haber sacado esta misma tabla
-
-
+#sin haber hecho la parte de valores unicos tambien se pudo haber sacado esta misma tabla
 #https://www3.nd.edu/~steve/computing_with_data/24_dplyr/dplyr.html
 
 matric_vir_xprog_191_2 <- group_by(matriculados_191, programa)
