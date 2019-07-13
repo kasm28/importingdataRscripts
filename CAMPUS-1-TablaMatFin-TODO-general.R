@@ -51,12 +51,26 @@ sapply(matriculados1, class)
 
 str(matriculados1)
 #contamos los valores unicos para las variables estudiante y ODM 
-count() ???????
+
+as.data.frame(table(matriculados1))
+
+#v <- c(matriculados1$estudiante, matriculados1$ODM)
+#aggregate(data.frame(count = v), list(value = v), length)
 
 #creamos la variable que nos dará el codigo unico por el cual
 #vamos a empezar a limpiar los datos
-matriculados1['codigounico'] <- unite(matriculados1, matriculados1$codigounico, c(3:9, -4:-8)         verificar 
-                                          
+#matriculados1['codigounico'] <- unite(matriculados1, matriculados1$codigounico, c(3:9, -4:-8)         verificar 
+
+library(dplyr)
+#states.df <- data.frame(name = as.character(state.name),
+#                        region = as.character(state.region), 
+#                        division = as.character(state.division))
+#res = mutate(states.df,
+#   concated_column = paste(name, region, division, sep = '_'))
+matriculados1['codunico'] <- mutate(matriculados1,
+                                       codunico = paste( matriculados1$estudiante, matriculados1$ODM, sep= "."))
+
+
 #importamos los datos de los programas para conocer los nombres
 #que ya viene en formato de excel documento .xls
 #y pegarselos a los codigos que trae el .txt
@@ -74,36 +88,45 @@ matriculados_191 <- merge(matriculados1, programas_name, by="CodCarrera", all=TR
 #al final del "CodCarrera" o sencillamente los que cruzaron con el 
 #merge() anterior, que son los de la tabla de programas de virtual.
 
+#primero creamos un vector con los codigos de programa de la tabla de 36 programas
+programs_virt <- programas_name$CodPrograma
+programs_virt
 
 
-delete rows which do not appear on "programas_name" -do not end with V (expluding the exception V1324)
-OR
-keep rows that appear on "programas_name" -ended with V (including the exception V1324)
+#y ese vector se lo paso como condicion al comando keep o drop rows
+install.packages("dplyr")
+library(dplyr)
+library(magrittr)
 
-le paso un vector con los codigos de programa de la tabla de 36 programas 
-y ese vector lo coloco como condicion para keep o drop rows
+#to keep rows that appear on "programas_name" -ended with V (including the exception V1324)
+#and delete anything else
+matric_virt_191 <- matriculados_191 %>%
+  dplyr::filter(CodCarrera %in% progrms_virt)
 
-
-
-
-
-
+#OR to keep rows which do not appear on "programas_name" -do not end with V (expluding the exception V1324)
+#matric_virt_191 <- matriculados_191 %>%
+#  dplyr::filter(!CodCarrera %in% progrms_virt)
 
 install.packages("tydiverse")
 
 library(tidyverse)
 # Remove duplicates based on "codunico" column
-matric_vir_191 <- matriculados_191[!duplicated(matriculados_191$codunico), ]
+#matric_virt_191 <- matriculados_191[!duplicated(matriculados_191$codunico), ]
+
+#matric_virt_191_uniq <- matric_virt_191[!duplicated(matric_virt_191$codunico), ]
+
 #o se puede con el comando unique() que me deja un dataset con
 #solo los datos unicos pero no nos da el mismo resultado?
 
-install.packages("dplyr")
 library(dplyr)
 #Remove duplicate rows based on all columns:
 #my_data %>% distinct()                                 
 #Remove duplicate rows based on certain columns (variables):
 #my_data %>% distinct(col1, other_col, col3, .keep_all = TRUE)
-matric_vir_191 <- matriculados_191 %>% distinct(codunico, .keep_all= TRUE)
+# sin haber filtrado por programas virtuales sería: 
+#matric_virt_191 <- matriculados_191 %>% distinct(codunico, .keep_all= TRUE)
+
+matric_virt_191_uniq <- matric_virt_191 %>% distinct(codunico, .keep_all= TRUE)
 
 #buscamos hacer un subset con la suma de estudiantes matriculados por
 #programa. Primero agrupamos todo por programa en matric_xprog_vir_191
