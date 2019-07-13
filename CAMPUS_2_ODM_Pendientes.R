@@ -28,7 +28,29 @@
 #on the ODM, like discounts and many other charges that students are paying
 #for the semester or cohort of studying.
 
+#Then we are going to append this data set with "EstudiantesDir.txt" in order to 
+#have telephone number and email to contact students and make a follow up 
+#to their no payment specific situation.
+
 
 #######################################################          NOTES       ######
 #To concatenate words, inserting a . in between to words instead of a space.
 #Make sure that any missing values in your data set are indicated with NA.
+
+rm(list=ls())
+getwd()
+setwd("<location of our dataset>")
+
+library(data.table)
+# Check if you already installed the package
+any(grepl("data.table", installed.packages()))
+
+
+ptes1 <- as.data.frame(read.delim(file.choose(), sep="!", header=TRUE))
+head(ptes1)
+summary(ptes1)
+class(ptes1)
+sapply(ptes1, class) 
+
+str(ptes1)
+#contamos los valores unicos para las variables estudiante y ODM 
