@@ -56,31 +56,53 @@ write.csv(ptes_virt_192_uniq, file="ptes_192_hoy.csv")
 
 
 estudiantes_dir <- as.data.frame(read.delim(file.choose(), sep="!", header=TRUE))
-sapply(estudiantes_dir, class) 
+sapply(estudiantes_dir, class)
 str(estudiantes_dir)
 
 
 colnames(estudiantes_dir)
 
 names(estudiantes_dir)[names(estudiantes_dir) == "Cod.Carrera"] <- "CodCarrera"
-columnas_elim <- c("ID", "Nombre", "Genero", "Direccion", "Jornada", "Nucleo", "Estrato", 
+columnas_elim <- c("ID", "Genero", "Direccion", "Jornada", "Nucleo", "Estrato", 
                   "Nombre.1", "Nombre.2", "Apellido.1", "Apellido.2", "Fecha.Nacimiento",
-                  "X", "CodCarrera", "Tipo.ID", "Cohorte", "Mencion", "Estado")
+                  "X", "Tipo.ID", "Cohorte", "Mencion", "Estado")
 estudiantes_dir <- estudiantes_dir[,!(names(estudiantes_dir) %in% columnas_elim)]
-
+colnames(estudiantes_dir)
 
 ptes_virt_192_uniq$Estudiante <- as.character(ptes_virt_192_uniq$Estudiante)
 estudiantes_dir$Estudiante <- as.character(estudiantes_dir$Estudiante)
-ptes_virt_192_uniq_dir <- merge(ptes_virt_192_uniq, estudiantes_dir, by="Estudiante", all.x = TRUE)
+sapply(estudiantes_dir, class)
+
+rm(columnas_elim)
+#ptes_virt_192_uniq_dir <- merge(ptes_virt_192_uniq, estudiantes_dir, by="Estudiante", all.x = TRUE)
 
 # Merging left and right: Data frames have columns "id" in common
+install.packages("sqldf")
+install.packages("gsubfn")
+install.packages("RSQLite")
+install.packages("proto")
+library(sqldf)
+mysqldatajoin1 <- as.data.frame(sqldf("select * from ptes_virt_192_uniq left join estudiantes_dir on ptes_virt_192_uniq.Estudiante = estudiantes_dir.Estudiante"))
+#mysqldatajoin1 <- as.data.frame(mysqldatajoin1)
+colnames(mysqldatajoin1)
+
+
+ptes_virt_192_uniq_sql_dir <- mysqldatajoin1[, -(28:30)]
+colnames(ptes_virt_192_uniq_sql_dir)
+ptes_virt_192_uniq_sql_dir <- ptes_virt_192_uniq_sql_dir[, -10]
+ptes_virt_192_uniq_sql_dir <- ptes_virt_192_uniq_sql_dir[, -17]
+
 #library(sqldf)
 #mysqldatajoin <- sqldf("select left.*, right.* from left left join right on right.id = left.id")
+
+install.packages("rJava", "xlsx")
+library(rJava)
+library(xlsx)
+#write.csv(mysqldatajoin1, file="ptes_192_hoy_v2.csv")
+write.xlsx2(ptes_virt_192_uniq_sql_dir, file = "ptes_19x_hoy_v2.xlsx", 
+            sheetName ="matric_19x_2019xxxx",  col.names = TRUE, row.names = FALSE)
 
 rm(ptes1)
 rm(ptes_192)
 rm(ptes_virt_192)
-rm(columnas_elim)
 
-library(xlsx)
-write.csv(ptes_virt_192_uniq, file="ptes_192_hoy_v2.csv")
