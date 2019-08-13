@@ -64,7 +64,7 @@ matriculados1$Estudiante <- as.factor(matriculados1$Estudiante)
 library(readxl)                                         
 programas_name <- as.data.frame(read_excel(file.choose(), col_names = TRUE))
 
-matriculados_191 <- merge(matriculados1, programas_name, by="CodCarrera", all=TRUE)
+matriculados_191 <- merge(matriculados1, programas_name, by="CodCarrera")
 #Returns all rows from both tables, join records from the 
 #left which have matching keys in the right table.
 
@@ -87,7 +87,7 @@ matric_virt_191_uniq <- matric_virt_191 %>% distinct(codunico, .keep_all= TRUE)
 
 #ESTE SERA EL ARCHIVO LIMPIO CON EL QUE SACAMOS EL REPORTE DIARIO 
 #DE MATRICULADOS EN UMB VIRTUAL
-install.packages("xlsx")
+#install.packages("xlsx")
 write.csv(matric_virt_191_uniq, file="matric_191_hoy.csv")
 
 
