@@ -10,9 +10,8 @@ class(ptes1)
 sapply(ptes1, class) 
 
 str(ptes1)
-
-
 colnames(ptes1)
+
 names(ptes1)[names(ptes1) == "Cod.Carrera"] <- "CodCarrera"
 
 #creamos la variable que nos dará el codigo unico por el cual
@@ -47,10 +46,10 @@ ptes_virt_192 <- ptes_192 %>%
 ptes_virt_192_uniq <- ptes_virt_192 %>% distinct(codunico, .keep_all= TRUE)
 
 library(xlsx)
-write.csv(ptes_virt_192_uniq, file="ptes_192_hoy.csv")
+write.xlsx(ptes_virt_192_uniq, file="ODM-Pendientes_191_UMB_Virtual_201908xx.xlsx", col.names = TRUE, row.names = FALSE)
 
 
-####################################
+################################################################################
 #pegamos los numeros telefonicos y correo electronico de los estudiantes pendientes
 #de pago de ODM con el fin de hacer seguimiento a su proceso de legalizacion y pago
 
@@ -58,20 +57,20 @@ write.csv(ptes_virt_192_uniq, file="ptes_192_hoy.csv")
 estudiantes_dir <- as.data.frame(read.delim(file.choose(), sep="!", header=TRUE))
 sapply(estudiantes_dir, class)
 str(estudiantes_dir)
-
-
 colnames(estudiantes_dir)
 
+
 names(estudiantes_dir)[names(estudiantes_dir) == "Cod.Carrera"] <- "CodCarrera"
-columnas_elim <- c("ID", "Genero", "Direccion", "Jornada", "Nucleo", "Estrato", 
-                  "Nombre.1", "Nombre.2", "Apellido.1", "Apellido.2", "Fecha.Nacimiento",
-                  "X", "Tipo.ID", "Cohorte", "Mencion", "Estado")
+columnas_elim <- c("Jornada", "Nucleo", "Estrato", "Nombre.1", "Nombre.2", 
+                   "Apellido.1", "Apellido.2", "Fecha.Nacimiento",
+                   "X", "Tipo.ID", "Cohorte", "Mencion", "Estado")
 estudiantes_dir <- estudiantes_dir[,!(names(estudiantes_dir) %in% columnas_elim)]
 colnames(estudiantes_dir)
 
-ptes_virt_192_uniq$Estudiante <- as.character(ptes_virt_192_uniq$Estudiante)
-estudiantes_dir$Estudiante <- as.character(estudiantes_dir$Estudiante)
+#ptes_virt_192_uniq$Estudiante <- as.factor(ptes_virt_192_uniq$Estudiante)
+#estudiantes_dir$Estudiante <- as.factor(estudiantes_dir$Estudiante)
 sapply(estudiantes_dir, class)
+
 
 rm(columnas_elim)
 #ptes_virt_192_uniq_dir <- merge(ptes_virt_192_uniq, estudiantes_dir, by="Estudiante", all.x = TRUE)
@@ -82,15 +81,18 @@ install.packages("gsubfn")
 install.packages("RSQLite")
 install.packages("proto")
 library(sqldf)
-mysqldatajoin1 <- as.data.frame(sqldf("select * from ptes_virt_192_uniq left join estudiantes_dir on ptes_virt_192_uniq.Estudiante = estudiantes_dir.Estudiante"))
+
+#mysqldatajoin1 <- as.data.frame(sqldf("select * from ptes_virt_192_uniq left join estudiantes_dir on ptes_virt_192_uniq.Estudiante = estudiantes_dir.Estudiante"))
 #mysqldatajoin1 <- as.data.frame(mysqldatajoin1)
 colnames(mysqldatajoin1)
 
 
 ptes_virt_192_uniq_sql_dir <- mysqldatajoin1[, -(28:30)]
 colnames(ptes_virt_192_uniq_sql_dir)
+ptes_virt_192_uniq_sql_dir <- ptes_virt_192_uniq_sql_dir[, -18]
 ptes_virt_192_uniq_sql_dir <- ptes_virt_192_uniq_sql_dir[, -10]
-ptes_virt_192_uniq_sql_dir <- ptes_virt_192_uniq_sql_dir[, -17]
+colnames(ptes_virt_192_uniq_sql_dir)
+
 
 #library(sqldf)
 #mysqldatajoin <- sqldf("select left.*, right.* from left left join right on right.id = left.id")

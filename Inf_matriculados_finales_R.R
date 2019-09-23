@@ -88,9 +88,10 @@ matric_virt_191_uniq <- matric_virt_191 %>% distinct(codunico, .keep_all= TRUE)
 #ESTE SERA EL ARCHIVO LIMPIO CON EL QUE SACAMOS EL REPORTE DIARIO 
 #DE MATRICULADOS EN UMB VIRTUAL
 #install.packages("xlsx")
-write.csv(matric_virt_191_uniq, file="matric_191_hoy.csv")
+#write.csv(matric_virt_191_uniq, file="matric_191_hoy.csv")
 
-
+library(xlsx)
+write.xlsx(matric_virt_191_uniq, file="Matric_191_UMB_Virtual_201908xx.xlsx", col.names = TRUE, row.names = FALSE)
 
 
 
